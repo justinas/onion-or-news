@@ -3,7 +3,7 @@ use serde::Deserialize;
 #[derive(Deserialize, Debug)]
 pub struct ListingData {
     pub children: Vec<Post>,
-    pub after: String,
+    pub after: Option<String>,
 }
 
 #[derive(Deserialize, Debug)]
@@ -21,6 +21,7 @@ pub struct PostData {
     pub title: String,
     pub name: String,
     pub permalink: String,
+    pub subreddit: String,
 }
 
 impl PostData {
