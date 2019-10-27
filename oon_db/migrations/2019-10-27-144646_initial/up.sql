@@ -1,5 +1,5 @@
 -- To be able to select an exact number of random rows
-CREATE EXTENSION tsm_system_rows;
+CREATE EXTENSION IF NOT EXISTS tsm_system_rows;
 
 CREATE TABLE questions (
     id          UUID PRIMARY KEY,
