@@ -65,6 +65,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .and(warp::body::json::<GuessRequest>())
         .and_then(guess_handler);
 
+    println!("Listening on http://127.0.0.1:{}", port);
     warp::serve(guess).run(([127u8, 0, 0, 1], port)).await;
     Ok(())
 }
