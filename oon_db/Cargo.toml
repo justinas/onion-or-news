@@ -5,5 +5,5 @@ name = "oon_db"
 version = "0.1.0"
 
 [dependencies]
-diesel = { version = "1.4", features = ["postgres"] }
-uuid = "0.8"
+diesel = { version = "1.4", features = ["postgres", "r2d2", "uuidv07"] }
+uuid = "0.7"
