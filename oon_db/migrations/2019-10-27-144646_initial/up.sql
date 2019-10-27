@@ -1,6 +1,3 @@
--- To be able to select an exact number of random rows
-CREATE EXTENSION IF NOT EXISTS tsm_system_rows;
-
 CREATE TABLE questions (
     id          UUID PRIMARY KEY,
     foreign_id  TEXT NOT NULL,
