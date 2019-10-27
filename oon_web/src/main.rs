@@ -3,7 +3,7 @@ mod types;
 use std::env;
 use std::sync::Arc;
 
-use warp::{path, Filter};
+use warp::Filter;
 
 use oon_db::{models, Database};
 
@@ -17,9 +17,7 @@ async fn guess_handler(
     db: Arc<Database>,
     request: GuessRequest,
 ) -> Result<impl warp::Reply, warp::reject::Rejection> {
-    let question = get_question(db)
-        .await
-        .map_err(|_| warp::reject::custom("oops"))?;
+    let question = get_question(db).await.map_err(warp::reject::custom)?;
 
     // TODO: report whether the answer is correct
 
