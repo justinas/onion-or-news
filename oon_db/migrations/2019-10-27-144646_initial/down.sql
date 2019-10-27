@@ -1,2 +1,2 @@
-DROP TABLE questions;
 DROP TABLE answers;
+DROP TABLE questions;
