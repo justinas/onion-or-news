@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Deserialize)]
 pub struct GuessRequest {
     pub choice_id: Option<i32>,
+    pub question_id: Option<uuid::Uuid>,
 }
 
 #[derive(Serialize)]

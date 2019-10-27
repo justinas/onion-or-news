@@ -46,6 +46,18 @@ impl Database {
         Ok(Database { pool })
     }
 
+    pub fn get_question(&self, id: uuid::Uuid) -> Result<models::Question, Error> {
+        let conn = self.pool.get()?;
+        let results = schema::questions::table
+            .filter(schema::questions::id.eq(id))
+            .limit(1)
+            .load::<models::Question>(&conn)?;
+        match results.into_iter().next() {
+            Some(q) => Ok(q),
+            None => Err(Error::NotFound),
+        }
+    }
+
     pub fn get_random_question(&self) -> Result<models::Question, Error> {
         no_arg_sql_function!(RANDOM, diesel::sql_types::Float, "RANDOM");
 

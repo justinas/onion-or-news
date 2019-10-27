@@ -9,7 +9,14 @@ use oon_db::{models, Database};
 
 use types::*;
 
-async fn get_question(db: Arc<Database>) -> Result<models::Question, oon_db::Error> {
+async fn get_question(
+    db: Arc<Database>,
+    id: uuid::Uuid,
+) -> Result<models::Question, oon_db::Error> {
+    tokio_executor::blocking::run(move || db.get_question(id)).await
+}
+
+async fn get_random_question(db: Arc<Database>) -> Result<models::Question, oon_db::Error> {
     tokio_executor::blocking::run(move || db.get_random_question()).await
 }
 
@@ -17,15 +24,24 @@ async fn guess_handler(
     db: Arc<Database>,
     request: GuessRequest,
 ) -> Result<impl warp::Reply, warp::reject::Rejection> {
-    let question = get_question(db).await.map_err(warp::reject::custom)?;
+    let this_question = match request.question_id {
+        Some(id) => Some(
+            get_question(db.clone(), id)
+                .await
+                .map_err(warp::reject::custom)?,
+        ),
+        None => None,
+    };
 
-    // TODO: report whether the answer is correct
+    let next_question = get_random_question(db)
+        .await
+        .map_err(warp::reject::custom)?;
 
     Ok(warp::reply::json(&GuessResponse {
-        correct_choice_id: None,
-        your_choice_id: None,
-        next_question_id: question.id,
-        next_question_title: question.title,
+        correct_choice_id: this_question.map(|q| q.choice_id),
+        your_choice_id: request.choice_id,
+        next_question_id: next_question.id,
+        next_question_title: next_question.title,
     }))
 }
 
