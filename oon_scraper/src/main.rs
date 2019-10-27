@@ -3,9 +3,33 @@ mod types;
 use std::env;
 use std::sync::Arc;
 
+use itertools::Itertools;
+
 use oon_db::{models, Database};
 
 use types::*;
+
+// The Onion uses a weird title-case where they capitalize each word,
+// even ones like "a", "an", "in", etc.
+//
+// In order to make the game harder,
+// we try to convert everything into this weird title case.
+fn bad_title_case(s: &str) -> String {
+    s.split_whitespace()
+        .map(|word| {
+            let mut new_word = String::with_capacity(s.len());
+            let mut chars = word.chars();
+            for c in chars.next().iter().copied().flat_map(char::to_uppercase) {
+                new_word.push(c);
+            }
+            for c in chars {
+                new_word.push(c);
+            }
+            new_word
+        })
+        .intersperse(String::from(" "))
+        .collect()
+}
 
 async fn get(
     subreddits: &[&str],
@@ -32,10 +56,11 @@ async fn get_all(db: Arc<Database>, subreddit: &str) -> Result<(), Box<dyn std::
             tokio_executor::blocking::run(move || {
                 let id = uuid::Uuid::new_v4();
                 let subreddit = post.data.subreddit.to_ascii_lowercase();
+                let title = bad_title_case(&post.data.title);
                 let question = models::NewQuestion {
                     id: &id,
                     foreign_id: &post.data.name,
-                    title: &post.data.title,
+                    title: &title,
                     url: &post.data.full_permalink(),
                     choice_id: match &*subreddit {
                         "theonion" => 1,
