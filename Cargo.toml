@@ -1,2 +1,2 @@
 [workspace]
-members = ["oon_scraper"]
+members = ["oon_db", "oon_scraper"]
