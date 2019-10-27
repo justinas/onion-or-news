@@ -1,0 +1,21 @@
+language: rust
+
+rust:
+  - beta
+
+before_deploy:
+  - git config --local user.name "Justinas Stankevicius"
+  - git config --local user.email "justinas@justinas.org"
+  - export TRAVIS_TAG=${TRAVIS_TAG:-$(date -u +'%Y%m%d%TH%M%S')-$(git log --format=%h -1)}
+  - git tag $TRAVIS_TAG
+
+script:
+  - cargo build --release --verbose 
+  - tar -cz -f release.tar.gz -C target/release oon_{scraper,web}
+
+deploy:
+  provider: releases
+  api_key: TODO
+  file: release.tar.gz
+  skip_cleanup: true
+  draft: true
