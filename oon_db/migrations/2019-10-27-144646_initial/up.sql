@@ -10,6 +10,7 @@ CREATE TABLE questions (
 );
 
 CREATE UNIQUE INDEX ON questions (foreign_id);
+CREATE INDEX on questions (choice_id);
 
 CREATE TABLE answers (
     id          BIGINT PRIMARY KEY,
