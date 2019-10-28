@@ -55,18 +55,18 @@
       },
       handleKeyPress: function(e) {
         switch (e.key) {
-          case 'o':
-            this.guess(1);
-            break;
-          case 'n':
-            this.guess(2);
-            break;
+        case 'o':
+          this.guess(1);
+          break;
+        case 'n':
+          this.guess(2);
+          break;
         }
       },
       resetStats: function() {
         this.stats.correct = 0;
         this.stats.wrong = 0;
-      }
+      },
     },
 
     watch: {
@@ -75,7 +75,7 @@
           localStorage.stats = JSON.stringify(newStats);
         },
         deep: true,
-      }
+      },
     },
   });
 
