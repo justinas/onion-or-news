@@ -47,6 +47,8 @@ async fn guess_handler(
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    env_logger::init();
+
     let port = if let Ok(p) = env::var("PORT") {
         p.parse()?
     } else {
@@ -72,7 +74,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let script = warp::path("script.js")
         .and(warp::fs::file("static/script.js"));
 
-    println!("Listening on http://127.0.0.1:{}", port);
     warp::serve(index.or(script).or(guess)).run(([127u8, 0, 0, 1], port)).await;
     Ok(())
 }
