@@ -1,6 +1,25 @@
 <!doctype html>
 <html>
+    <head>
+        <meta charset="utf-8">
+        <title>Onion or News?</title>
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+            integrity="sha256-YLGeXaapI0/5IgZopewRJcFXomhRMlYYjugPLSyNjTY="
+            crossorigin="anonymous">
+        <script
+            src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"
+            integrity="sha256-chlNFSVx3TdcQ2Xlw7SvnbLAavAQLO0Y/LBiWX04viY="
+            crossorigin="anonymous">
+        </script>
+    </head>
     <body>
-        Hi.
+        <div id="app">
+            <h2>{{ title }}</h2>
+            <button v-on:click="guess(1)">The Onion</button>
+            <button v-on:click="guess(2)">Real news</button>
+        </div>
     </body>
+    <script src="script.js"></script>
 </html>
