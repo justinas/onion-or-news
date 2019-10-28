@@ -43,6 +43,8 @@
             this.result = {
               correct: d.your_choice_id === d.correct_choice_id,
               correct_choice_id: d.correct_choice_id,
+              meta_url: d.meta_url,
+              url: d.url,
             };
             this.stats.correct += this.result.correct;
             this.stats.wrong += !this.result.correct;

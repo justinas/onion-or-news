@@ -42,9 +42,11 @@
                         v-if="result">
                         {{ result.correct ? "Correct!" : "Wrong..." }}
                         That was
-                        <strong>
-                            {{ result.correct_choice_id == 1 ? "The Onion" : "real news" }}.
-                        </strong>
+                        <strong>{{ result.correct_choice_id == 1 ? "The Onion" : "real news" }}</strong>.
+                        <small>
+                            (<a v-bind:href="result.url">article</a>,
+                            <a v-bind:href="result.meta_url">reddit</a>)
+                        </small>
                     </div>
                     <div v-else>
                         <p>
