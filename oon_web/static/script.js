@@ -1,15 +1,16 @@
 (function() {
   function sendGuess(question_id, choice_id) {
-      return fetch(
-        '/guess',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({question_id, choice_id}),
-        })
+    return fetch(
+      '/guess',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({question_id, choice_id}),
+      })
       .then(r => r.json());
   }
 
+  // eslint-disable-next-line no-unused-vars
   let app = new Vue({
     el: '#app',
     data: {
