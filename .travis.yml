@@ -3,14 +3,18 @@ language: rust
 rust:
   - beta
 
+before_install:
+  - nvm install stable
+  - npm install -g eslint
+
+script:
+  - make release
+
 before_deploy:
   - git config --local user.name "Justinas Stankevicius"
   - git config --local user.email "justinas@justinas.org"
   - export TRAVIS_TAG=${TRAVIS_TAG:-$(date -u +'%Y%m%d%TH%M%S')-$(git log --format=%h -1)}
   - git tag $TRAVIS_TAG
-
-script:
-  - make release
 
 deploy:
   provider: releases
