@@ -4,6 +4,7 @@ use std::env;
 use std::net::SocketAddr;
 use std::sync::Arc;
 
+use tokio_executor::blocking;
 use warp::Filter;
 
 use oon_db::{models, Database};
@@ -14,11 +15,11 @@ async fn get_question(
     db: Arc<Database>,
     id: uuid::Uuid,
 ) -> Result<models::Question, oon_db::Error> {
-    tokio_executor::blocking::run(move || db.get_question(id)).await
+    blocking::run(move || db.get_question(id)).await
 }
 
 async fn get_random_question(db: Arc<Database>) -> Result<models::Question, oon_db::Error> {
-    tokio_executor::blocking::run(move || db.get_random_question()).await
+    blocking::run(move || db.get_random_question()).await
 }
 
 async fn insert_answer(
@@ -27,7 +28,7 @@ async fn insert_answer(
     question_id: uuid::Uuid,
     choice_id: i32,
 ) -> Result<usize, oon_db::Error> {
-    tokio_executor::blocking::run(move || db.insert_answer(ip, question_id, choice_id)).await
+    blocking::run(move || db.insert_answer(ip, question_id, choice_id)).await
 }
 
 async fn guess_handler(
