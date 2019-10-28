@@ -32,6 +32,7 @@ async fn guess_handler(
         ),
         None => None,
     };
+    let this_question = this_question.as_ref();
 
     let next_question = get_random_question(db)
         .await
@@ -40,6 +41,10 @@ async fn guess_handler(
     Ok(warp::reply::json(&GuessResponse {
         correct_choice_id: this_question.map(|q| q.choice_id),
         your_choice_id: request.choice_id,
+        url: this_question.map(|q| q.url.clone()),
+        meta_url: this_question.map(|q| q.meta_url.clone()),
+        thumbnail: this_question.and_then(|q| q.thumbnail.clone()),
+
         next_question_id: next_question.id,
         next_question_title: next_question.title,
     }))

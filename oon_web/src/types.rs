@@ -10,6 +10,10 @@ pub struct GuessRequest {
 pub struct GuessResponse {
     pub correct_choice_id: Option<i32>,
     pub your_choice_id: Option<i32>,
+    pub url: Option<String>,
+    pub meta_url: Option<String>,
+    pub thumbnail: Option<String>,
+
     pub next_question_id: uuid::Uuid,
     pub next_question_title: String,
 }
