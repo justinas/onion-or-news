@@ -97,4 +97,23 @@ impl Database {
             .on_conflict_do_nothing()
             .execute(&conn)?)
     }
+
+    pub fn insert_answer(
+        &self,
+        ip: std::net::IpAddr,
+        question_id: uuid::Uuid,
+        choice_id: i32,
+    ) -> Result<usize, Error> {
+        let conn = self.pool.get()?;
+        let ipnet = ip.into();
+        let answer = models::NewAnswer {
+            ip: &ipnet,
+            question_id: &question_id,
+            choice_id,
+        };
+        Ok(diesel::insert_into(schema::answers::table)
+            .values(&answer)
+            .on_conflict_do_nothing()
+            .execute(&conn)?)
+    }
 }

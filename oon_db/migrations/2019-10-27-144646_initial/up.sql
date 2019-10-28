@@ -12,11 +12,11 @@ CREATE UNIQUE INDEX ON questions (foreign_id);
 CREATE INDEX on questions (choice_id);
 
 CREATE TABLE answers (
-    id          BIGINT PRIMARY KEY,
+    id          BIGSERIAL PRIMARY KEY,
     ip          INET NOT NULL,
     question_id UUID NOT NULL REFERENCES questions(id),
     choice_id   INT NOT NULL
 );
 
-CREATE UNIQUE INDEX ON answers (ip, id);
+CREATE UNIQUE INDEX ON answers (ip, question_id);
 CREATE INDEX ON answers (question_id);

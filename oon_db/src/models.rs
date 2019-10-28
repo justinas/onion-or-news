@@ -26,3 +26,11 @@ pub struct Question {
     pub url: String,
     pub thumbnail: Option<String>,
 }
+
+#[derive(Debug, Insertable)]
+#[table_name = "answers"]
+pub struct NewAnswer<'a> {
+    pub ip: &'a ipnetwork::IpNetwork,
+    pub question_id: &'a Uuid,
+    pub choice_id: i32,
+}
