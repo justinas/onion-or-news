@@ -61,6 +61,10 @@
             break;
         }
       },
+      resetStats: function() {
+        this.stats.correct = 0;
+        this.stats.wrong = 0;
+      }
     },
 
     watch: {
