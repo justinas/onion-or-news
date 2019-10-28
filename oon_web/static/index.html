@@ -23,9 +23,16 @@
                     {{ result.correct_choice_id == 1 ? "The Onion" : "real news" }}.
                 </strong>
             </div>
+
             <h2>{{ title }}</h2>
             <button v-on:click="guess(1)">The Onion</button>
             <button v-on:click="guess(2)">Real news</button>
+
+            <div class="stats">
+                <h3>Your stats</h3>
+                <p>Correct: {{ stats.correct }}</p>
+                <p>Wrong: {{ stats.wrong}}</p>
+            </div>
         </div>
     </body>
     <script src="script.js"></script>
