@@ -46,6 +46,12 @@
                             {{ result.correct_choice_id == 1 ? "The Onion" : "real news" }}.
                         </strong>
                     </div>
+                    <div v-else>
+                        <p>
+                        Is the following headline from the satyrical The Onion
+                        or a real news outlet? Try to guess!
+                        </p>
+                    </div>
 
                     <h3 class="question text-center">{{ title || "Loading..." }}</h3>
                     <div class="row justify-content-center">
