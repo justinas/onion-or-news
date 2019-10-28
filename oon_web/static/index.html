@@ -17,6 +17,10 @@
             crossorigin="anonymous">
         </script>
         <style>
+        [v-cloak] {
+            display: none;
+        }
+
         .question {
             font-family: serif;
             font-style: italic;
@@ -31,7 +35,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-12" id="app">
+                <div class="col-12" id="app" v-cloak>
                     <div
                         class="alert alert-success result"
                         v-bind:class="{ 'alert-success': result.correct, 'alert-danger': !result.correct }"
@@ -43,7 +47,7 @@
                         </strong>
                     </div>
 
-                    <h3 class="question text-center">{{ title }}</h3>
+                    <h3 class="question text-center">{{ title || "Loading..." }}</h3>
                     <div class="row justify-content-center">
                         <div class="col-10 col-sm-8 col-md-6 col-lg-4 d-flex justify-content-around">
                             <button class="btn btn-lg btn-success" v-on:click="guess(1)">
