@@ -10,8 +10,7 @@ before_deploy:
   - git tag $TRAVIS_TAG
 
 script:
-  - cargo build --release --verbose 
-  - tar -cz -f release.tar.gz -C $PWD/target/release oon_{scraper,web} -C $PWD/oon_web static
+  - make release
 
 deploy:
   provider: releases
