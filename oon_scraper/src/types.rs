@@ -21,6 +21,8 @@ pub struct PostData {
     pub title: String,
     pub name: String,
     pub permalink: String,
+    pub url: String,
+    pub thumbnail: Option<String>,
     pub subreddit: String,
 }
 

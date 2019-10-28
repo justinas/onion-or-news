@@ -12,8 +12,10 @@ table! {
         id -> Uuid,
         foreign_id -> Text,
         title -> Text,
-        url -> Text,
         choice_id -> Int4,
+        meta_url -> Text,
+        url -> Text,
+        thumbnail -> Nullable<Text>,
     }
 }
 

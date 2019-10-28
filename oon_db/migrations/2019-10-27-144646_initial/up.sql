@@ -2,8 +2,10 @@ CREATE TABLE questions (
     id          UUID PRIMARY KEY,
     foreign_id  TEXT NOT NULL,
     title       TEXT NOT NULL,
+    choice_id   INT NOT NULL,
+    meta_url    TEXT NOT NULL,
     url         TEXT NOT NULL,
-    choice_id   INT NOT NULL
+    thumbnail   TEXT
 );
 
 CREATE UNIQUE INDEX ON questions (foreign_id);

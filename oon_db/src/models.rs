@@ -9,8 +9,10 @@ pub struct NewQuestion<'a> {
     pub id: &'a Uuid,
     pub foreign_id: &'a str,
     pub title: &'a str,
-    pub url: &'a str,
     pub choice_id: i32,
+    pub meta_url: &'a str,
+    pub url: &'a str,
+    pub thumbnail: Option<&'a str>,
 }
 
 #[derive(Queryable, QueryableByName)]
@@ -19,6 +21,8 @@ pub struct Question {
     pub id: Uuid,
     pub foreign_id: String,
     pub title: String,
-    pub url: String,
     pub choice_id: i32,
+    pub meta_url: String,
+    pub url: String,
+    pub thumbnail: Option<String>,
 }

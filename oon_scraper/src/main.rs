@@ -61,12 +61,14 @@ async fn get_all(db: Arc<Database>, subreddit: &str) -> Result<(), Box<dyn std::
                     id: &id,
                     foreign_id: &post.data.name,
                     title: &title,
-                    url: &post.data.full_permalink(),
                     choice_id: match &*subreddit {
                         "theonion" => 1,
                         "nottheonion" => 2,
                         _ => panic!("Unexpected subreddit: {}", post.data.subreddit),
                     },
+                    meta_url: &post.data.full_permalink(),
+                    url: &post.data.url,
+                    thumbnail: post.data.thumbnail.as_ref().map(String::as_ref),
                 };
                 db.insert_question(&question).unwrap();
                 println!("Inserted {:?}", question.title);
