@@ -51,6 +51,16 @@
             this.question_id = d.next_question_id;
           });
       },
+      handleKeyPress: function(e) {
+        switch (e.key) {
+          case 'o':
+            this.guess(1);
+            break;
+          case 'n':
+            this.guess(2);
+            break;
+        }
+      },
     },
 
     watch: {
@@ -62,4 +72,6 @@
       }
     },
   });
+
+  window.addEventListener('keyup', (e) => app.handleKeyPress(e));
 })();
