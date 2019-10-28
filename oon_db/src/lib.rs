@@ -7,12 +7,17 @@ use std::fmt;
 extern crate diesel;
 use diesel::prelude::*;
 use diesel::r2d2::{ConnectionManager, Pool, PoolError};
+#[macro_use]
+extern crate diesel_migrations;
 use rand::RngCore;
+
+embed_migrations!();
 
 #[derive(Debug)]
 pub enum Error {
     Diesel(diesel::result::Error),
-    Pool(diesel::r2d2::PoolError),
+    Migration(diesel_migrations::RunMigrationsError),
+    Pool(PoolError),
     NotFound,
 }
 
@@ -30,6 +35,12 @@ impl From<diesel::result::Error> for Error {
     }
 }
 
+impl From<diesel_migrations::RunMigrationsError> for Error {
+    fn from(e: diesel_migrations::RunMigrationsError) -> Self {
+        Error::Migration(e)
+    }
+}
+
 impl From<PoolError> for Error {
     fn from(e: PoolError) -> Self {
         Error::Pool(e)
@@ -44,6 +55,11 @@ impl Database {
     pub fn connect(conn: &str) -> Result<Self, Error> {
         let pool = Pool::new(ConnectionManager::<PgConnection>::new(conn))?;
         Ok(Database { pool })
+    }
+
+    pub fn migrate(&self) -> Result<(), Error> {
+        let conn = self.pool.get()?;
+        Ok(embedded_migrations::run(&conn)?)
     }
 
     pub fn get_question(&self, id: uuid::Uuid) -> Result<models::Question, Error> {

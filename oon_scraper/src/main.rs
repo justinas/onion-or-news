@@ -88,6 +88,7 @@ async fn get_all(db: Arc<Database>, subreddit: &str) -> Result<(), Box<dyn std::
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let db_url = env::var("DATABASE_URL").expect("Expected DATABASE_URL to be set");
     let db = Arc::new(Database::connect(&db_url)?);
+    db.migrate()?;
 
     let (r1, r2) = futures::future::join(
         get_all(db.clone(), "theonion"),

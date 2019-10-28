@@ -55,6 +55,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let db_url = env::var("DATABASE_URL").expect("Expected DATABASE_URL to be set");
     let db_arc = Arc::new(Database::connect(&db_url)?);
+    db_arc.migrate()?;
 
     let base = warp::any()
         .and(warp::body::content_length_limit(2 << 12))
