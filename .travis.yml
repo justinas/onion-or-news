@@ -11,7 +11,7 @@ before_deploy:
 
 script:
   - cargo build --release --verbose 
-  - tar -cz -f release.tar.gz -C target/release oon_{scraper,web}
+  - tar -cz -f release.tar.gz -C $PWD/target/release oon_{scraper,web} -C $PWD/oon_web static
 
 deploy:
   provider: releases

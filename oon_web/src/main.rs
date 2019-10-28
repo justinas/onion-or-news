@@ -66,7 +66,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .and(warp::body::json::<GuessRequest>())
         .and_then(guess_handler);
 
+    let index = warp::path::end()
+        .and(warp::fs::file("static/index.html"));
+
+    let script = warp::path("script.js")
+        .and(warp::fs::file("static/script.js"));
+
     println!("Listening on http://127.0.0.1:{}", port);
-    warp::serve(guess).run(([127u8, 0, 0, 1], port)).await;
+    warp::serve(index.or(script).or(guess)).run(([127u8, 0, 0, 1], port)).await;
     Ok(())
 }
