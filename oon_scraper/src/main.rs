@@ -48,6 +48,7 @@ async fn get(
 
 async fn get_all(db: Arc<Database>, subreddit: &str) -> Result<(), Box<dyn std::error::Error>> {
     let mut after: Option<String> = None;
+    let mut skipped = 0;
     loop {
         let list = get(&[subreddit], after.as_ref().map(String::as_ref)).await?;
 
@@ -70,12 +71,16 @@ async fn get_all(db: Arc<Database>, subreddit: &str) -> Result<(), Box<dyn std::
                     url: &post.data.url,
                     thumbnail: post.data.thumbnail.as_ref().map(String::as_ref),
                 };
-                db.insert_question(&question).unwrap();
-                println!("Inserted {:?}", question.title);
+                let affected_rows = db.insert_question(&question).unwrap();
+                if affected_rows == 1 {
+                    println!("Inserted {:?}", question.title);
+                }
+                affected_rows
             })
         });
 
-        futures::future::join_all(inserts).await;
+        let results = futures::future::join_all(inserts).await;
+        skipped += results.iter().filter(|&&c| c == 0).count();
 
         after = list.data.after;
         if after.is_none() {
@@ -83,6 +88,7 @@ async fn get_all(db: Arc<Database>, subreddit: &str) -> Result<(), Box<dyn std::
         }
     }
 
+    println!("Skipped {} existing entries", skipped);
     Ok(())
 }
 
