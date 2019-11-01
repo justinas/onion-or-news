@@ -116,12 +116,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let db_arc = Arc::new(Database::connect(&db_url)?);
     db_arc.migrate()?;
 
-    let base = warp::any()
+    let guess = warp::path("guess")
         .and(warp::body::content_length_limit(2 << 12))
-        .map(move || db_arc.clone());
-
-    let guess = base
-        .and(warp::path("guess"))
+        .map(move || db_arc.clone())
         .and(warp::body::json::<GuessRequest>())
         .and(get_ip())
         .and_then(guess_handler);
