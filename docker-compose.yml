@@ -1,0 +1,15 @@
+version: '3'
+services:
+  pg:
+    image: postgres:12
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql
+    environment:
+      POSTGRES_USER: oon
+      POSTGRES_DB: oon
+      POSTGRES_PASSWORD: hunter2
+
+volumes:
+  pgdata:
