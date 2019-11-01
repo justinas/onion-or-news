@@ -6,6 +6,7 @@ use std::sync::Arc;
 
 use log::error;
 use tokio_executor::blocking;
+use warp::reject::LengthRequired;
 use warp::Filter;
 
 use oon_db::{models, Database};
@@ -85,11 +86,20 @@ fn get_ip() -> impl Filter<Extract = (std::net::IpAddr,), Error = warp::Rejectio
 
 /// Hides errors from users, responding with a generic status code.
 async fn recover(rejection: warp::Rejection) -> Result<impl warp::Reply, warp::Rejection> {
-    error!("{:?}", rejection);
-    Ok(warp::reply::with_status(
-        warp::reply(),
-        warp::http::StatusCode::INTERNAL_SERVER_ERROR,
-    ))
+    if rejection.is_not_found() {
+        Err(rejection)
+    } else if rejection.find_cause::<LengthRequired>().is_some() {
+        Ok(warp::reply::with_status(
+            warp::reply(),
+            warp::http::StatusCode::BAD_REQUEST,
+        ))
+    } else {
+        error!("{:?}", rejection);
+        Ok(warp::reply::with_status(
+            warp::reply(),
+            warp::http::StatusCode::INTERNAL_SERVER_ERROR,
+        ))
+    }
 }
 
 #[tokio::main]
@@ -120,8 +130,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let script = warp::path("script.js").and(warp::fs::file("static/script.js"));
 
-    warp::serve(index.or(script).or(guess).recover(recover))
-        .run(([127u8, 0, 0, 1], port))
-        .await;
+    let routes = index.or(script).or(guess).recover(recover);
+
+    warp::serve(routes).run(([127u8, 0, 0, 1], port)).await;
     Ok(())
 }
