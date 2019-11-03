@@ -1,9 +1,9 @@
 language: rust
-
 cache: cargo
-
 rust:
   - beta
+
+if: tag IS blank
 
 before_install:
   - nvm install stable
