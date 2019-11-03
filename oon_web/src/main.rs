@@ -1,3 +1,5 @@
+#![deny(clippy::all)]
+
 mod types;
 
 use std::env;
@@ -50,7 +52,7 @@ async fn guess_handler(
 
     if let (Some(qid), Some(cid)) = (this_question.map(|q| q.id), request.choice_id) {
         let ip = remote_addr;
-        insert_answer(db.clone(), ip, qid.clone(), cid)
+        insert_answer(db.clone(), ip, qid, cid)
             .await
             .map_err(warp::reject::custom)?;
     }

@@ -1,3 +1,5 @@
+#![deny(clippy::all)]
+
 mod types;
 
 use std::env;

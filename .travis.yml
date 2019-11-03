@@ -9,6 +9,9 @@ before_install:
   - nvm install stable
   - npm install -g eslint
 
+before_script:
+  - rustup component add clippy
+
 script:
   - make release
 

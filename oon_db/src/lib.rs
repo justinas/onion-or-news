@@ -1,3 +1,5 @@
+#![deny(clippy::all)]
+
 pub mod models;
 pub mod schema;
 
