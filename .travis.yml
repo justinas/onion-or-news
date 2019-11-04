@@ -11,6 +11,7 @@ before_install:
 
 before_script:
   - rustup component add clippy
+  - rustup component add rustfmt
 
 script:
   - make release

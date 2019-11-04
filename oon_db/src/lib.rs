@@ -1,6 +1,7 @@
 #![deny(clippy::all)]
 
 pub mod models;
+#[rustfmt::skip]
 pub mod schema;
 
 use std::fmt;
