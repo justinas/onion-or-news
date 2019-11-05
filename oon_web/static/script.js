@@ -39,7 +39,6 @@
       guess: function(choice_id) {
         sendGuess(this.question_id, choice_id)
           .then(d => {
-            console.log(d);
             this.result = {
               correct: d.your_choice_id === d.correct_choice_id,
               correct_choice_id: d.correct_choice_id,
