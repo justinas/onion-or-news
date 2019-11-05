@@ -4,6 +4,7 @@ table! {
         ip -> Inet,
         question_id -> Uuid,
         choice_id -> Int4,
+        created_at -> Timestamp,
     }
 }
 
@@ -16,6 +17,7 @@ table! {
         meta_url -> Text,
         url -> Text,
         thumbnail -> Nullable<Text>,
+        created_at -> Timestamp,
     }
 }
 
