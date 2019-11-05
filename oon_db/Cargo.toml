@@ -5,7 +5,8 @@ name = "oon_db"
 version = "0.1.0"
 
 [dependencies]
-diesel = { version = "1.4", features = ["network-address", "postgres", "r2d2", "uuidv07"] }
+chrono = "0.4"
+diesel = { version = "1.4", features = ["chrono", "network-address", "postgres", "r2d2", "uuidv07"] }
 diesel_migrations = "1.4"
 ipnetwork = "0.15"
 rand = "0.7"

@@ -1,3 +1,4 @@
+use chrono::{naive::NaiveDateTime, DateTime, Utc};
 use diesel::{Insertable, Queryable, QueryableByName};
 use uuid::Uuid;
 
@@ -25,6 +26,13 @@ pub struct Question {
     pub meta_url: String,
     pub url: String,
     pub thumbnail: Option<String>,
+    created_at: NaiveDateTime,
+}
+
+impl Question {
+    pub fn created_at(&self) -> DateTime<Utc> {
+        DateTime::from_utc(self.created_at, Utc)
+    }
 }
 
 #[derive(Debug, Insertable)]
