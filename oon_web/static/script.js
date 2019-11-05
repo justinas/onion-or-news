@@ -11,7 +11,7 @@
   }
 
   // eslint-disable-next-line no-unused-vars
-  let app = new Vue({
+  const app = new Vue({
     el: '#app',
     data: {
       result: null,

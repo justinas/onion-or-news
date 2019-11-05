@@ -8,15 +8,28 @@ globals:
 parserOptions:
   ecmaVersion: 2018
 rules:
+  brace-style:
+    - error
   comma-dangle:
     - error
     - always-multiline
+  dot-location:
+    - error
+    - property
+  eqeqeq:
+    - error
   indent:
     - error
     - 2
   linebreak-style:
     - error
     - unix
+  no-var:
+    - error
+  no-trailing-spaces:
+    - error
+  prefer-const:
+    - error
   quotes:
     - error
     - single
