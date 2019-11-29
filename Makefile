@@ -9,4 +9,7 @@ release:
 		-C $(PWD)/target/release oon_scraper oon_web \
 		-C $(PWD)/oon_web static
 
-.PHONY: release
+setup-hooks:
+	ln -f -s $(PWD)/pre-commit .git/hooks/pre-commit
+
+.PHONY: release setup-hooks
