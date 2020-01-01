@@ -28,17 +28,20 @@ impl From<oon_db::Error> for Error {
     }
 }
 
-async fn get_question(
-    db: Arc<Database>,
-    id: uuid::Uuid,
-) -> Result<models::Question, Error> {
+async fn get_question(db: Arc<Database>, id: uuid::Uuid) -> Result<models::Question, Error> {
     // TODO: error-handling
-    task::spawn_blocking(move || db.get_question(id)).await.unwrap().map_err(Into::into)
+    task::spawn_blocking(move || db.get_question(id))
+        .await
+        .unwrap()
+        .map_err(Into::into)
 }
 
 async fn get_random_question(db: Arc<Database>) -> Result<models::Question, Error> {
     // TODO: error-handling
-    task::spawn_blocking(move || db.get_random_question()).await.unwrap().map_err(Into::into)
+    task::spawn_blocking(move || db.get_random_question())
+        .await
+        .unwrap()
+        .map_err(Into::into)
 }
 
 async fn insert_answer(
@@ -48,7 +51,10 @@ async fn insert_answer(
     choice_id: i32,
 ) -> Result<usize, Error> {
     // TODO: error-handling
-    task::spawn_blocking(move || db.insert_answer(ip, question_id, choice_id)).await.unwrap().map_err(Into::into)
+    task::spawn_blocking(move || db.insert_answer(ip, question_id, choice_id))
+        .await
+        .unwrap()
+        .map_err(Into::into)
 }
 
 async fn guess_handler(
@@ -96,7 +102,8 @@ async fn guess_handler(
 /// Else, the client might spoof the header.
 ///
 /// The fallback on remote socket address can be useful in development.
-fn get_ip() -> impl Filter<Extract = (std::net::IpAddr,), Error = std::convert::Infallible> + Clone {
+fn get_ip() -> impl Filter<Extract = (std::net::IpAddr,), Error = std::convert::Infallible> + Clone
+{
     warp::header("x-forwarded-for")
         .or(warp::addr::remote().map(|a: Option<SocketAddr>| a.expect("No remote addr").ip()))
         .unify()

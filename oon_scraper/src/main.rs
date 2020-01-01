@@ -82,7 +82,10 @@ async fn get_all(db: Arc<Database>, subreddit: &str) -> Result<(), Box<dyn std::
         });
 
         let results = futures::future::join_all(inserts).await;
-        skipped += results.into_iter().filter(|r| r.is_ok() && *r.as_ref().unwrap() == 0).count();
+        skipped += results
+            .into_iter()
+            .filter(|r| r.is_ok() && *r.as_ref().unwrap() == 0)
+            .count();
 
         after = list.data.after;
         if after.is_none() {
