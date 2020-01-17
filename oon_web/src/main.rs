@@ -7,7 +7,7 @@ use std::net::SocketAddr;
 use std::sync::Arc;
 
 use log::error;
-use tokio_executor::blocking;
+use tokio::task;
 use warp::reject::LengthRequired;
 use warp::Filter;
 
@@ -15,15 +15,33 @@ use oon_db::{models, Database};
 
 use types::*;
 
-async fn get_question(
-    db: Arc<Database>,
-    id: uuid::Uuid,
-) -> Result<models::Question, oon_db::Error> {
-    blocking::run(move || db.get_question(id)).await
+#[derive(Debug)]
+enum Error {
+    Database(oon_db::Error),
 }
 
-async fn get_random_question(db: Arc<Database>) -> Result<models::Question, oon_db::Error> {
-    blocking::run(move || db.get_random_question()).await
+impl warp::reject::Reject for Error {}
+
+impl From<oon_db::Error> for Error {
+    fn from(e: oon_db::Error) -> Self {
+        Error::Database(e)
+    }
+}
+
+async fn get_question(db: Arc<Database>, id: uuid::Uuid) -> Result<models::Question, Error> {
+    // TODO: error-handling
+    task::spawn_blocking(move || db.get_question(id))
+        .await
+        .unwrap()
+        .map_err(Into::into)
+}
+
+async fn get_random_question(db: Arc<Database>) -> Result<models::Question, Error> {
+    // TODO: error-handling
+    task::spawn_blocking(move || db.get_random_question())
+        .await
+        .unwrap()
+        .map_err(Into::into)
 }
 
 async fn insert_answer(
@@ -31,8 +49,12 @@ async fn insert_answer(
     ip: std::net::IpAddr,
     question_id: uuid::Uuid,
     choice_id: i32,
-) -> Result<usize, oon_db::Error> {
-    blocking::run(move || db.insert_answer(ip, question_id, choice_id)).await
+) -> Result<usize, Error> {
+    // TODO: error-handling
+    task::spawn_blocking(move || db.insert_answer(ip, question_id, choice_id))
+        .await
+        .unwrap()
+        .map_err(Into::into)
 }
 
 async fn guess_handler(
@@ -80,7 +102,8 @@ async fn guess_handler(
 /// Else, the client might spoof the header.
 ///
 /// The fallback on remote socket address can be useful in development.
-fn get_ip() -> impl Filter<Extract = (std::net::IpAddr,), Error = warp::Rejection> + Clone {
+fn get_ip() -> impl Filter<Extract = (std::net::IpAddr,), Error = std::convert::Infallible> + Clone
+{
     warp::header("x-forwarded-for")
         .or(warp::addr::remote().map(|a: Option<SocketAddr>| a.expect("No remote addr").ip()))
         .unify()
@@ -90,7 +113,7 @@ fn get_ip() -> impl Filter<Extract = (std::net::IpAddr,), Error = warp::Rejectio
 async fn recover(rejection: warp::Rejection) -> Result<impl warp::Reply, warp::Rejection> {
     if rejection.is_not_found() {
         Err(rejection)
-    } else if rejection.find_cause::<LengthRequired>().is_some() {
+    } else if rejection.find::<LengthRequired>().is_some() {
         Ok(warp::reply::with_status(
             warp::reply(),
             warp::http::StatusCode::BAD_REQUEST,

@@ -56,7 +56,7 @@ async fn get_all(db: Arc<Database>, subreddit: &str) -> Result<(), Box<dyn std::
 
         let inserts = list.data.children.into_iter().map(|post| {
             let db = db.clone();
-            tokio_executor::blocking::run(move || {
+            tokio::task::spawn_blocking(move || {
                 let id = uuid::Uuid::new_v4();
                 let subreddit = post.data.subreddit.to_ascii_lowercase();
                 let title = bad_title_case(&post.data.title);
@@ -82,7 +82,10 @@ async fn get_all(db: Arc<Database>, subreddit: &str) -> Result<(), Box<dyn std::
         });
 
         let results = futures::future::join_all(inserts).await;
-        skipped += results.iter().filter(|&&c| c == 0).count();
+        skipped += results
+            .into_iter()
+            .filter(|r| r.is_ok() && *r.as_ref().unwrap() == 0)
+            .count();
 
         after = list.data.after;
         if after.is_none() {

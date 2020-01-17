@@ -8,9 +8,8 @@ version = "0.1.0"
 futures = "0.3"
 itertools = "0.8"
 oon_db = { version = "0.1", path = "../oon_db" }
-reqwest = { version = "0.10.0-alpha.1", features = ["json"] }
+reqwest = { version = "0.10", features = ["json"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-tokio = "0.2.0-alpha.5"
-tokio-executor = "0.2.0-alpha.5"
+tokio = "0.2"
 uuid = { version = "0.7", features = ["v4"] }
