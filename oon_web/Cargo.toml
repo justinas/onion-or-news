@@ -10,7 +10,6 @@ log = "0.4"
 oon_db = { version = "0.1", path = "../oon_db" }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-tokio = "0.2.0-alpha.5"
-tokio-executor = "0.2.0-alpha.5"
+tokio = { version = "0.2", features = ["full"] }
 uuid = { version = "0.7", features = ["serde"] }
-warp = { git = "https://github.com/seanmonstar/warp/", rev = "42699c7735adb843dadcc1aa3180a137c32eaa9c" }
+warp = "0.2"

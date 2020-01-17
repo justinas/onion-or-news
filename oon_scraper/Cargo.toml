@@ -11,5 +11,5 @@ oon_db = { version = "0.1", path = "../oon_db" }
 reqwest = { version = "0.10", features = ["json"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-tokio = "0.2"
+tokio = { version = "0.2", features = ["full"] }
 uuid = { version = "0.7", features = ["v4"] }
