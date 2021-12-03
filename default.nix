@@ -1,10 +1,11 @@
 { pkgs ? import <nixpkgs> { }
+, lib ? pkgs.lib
 , naersk ? pkgs.callPackage
     (pkgs.fetchFromGitHub {
-      owner = "nmattia";
+      owner = "nix-community";
       repo = "naersk";
-      rev = "d5a23213d561893cebdf0d251502430334673036";
-      sha256 = "0ifvqv3vjg80hhgxr7b22i22gh2gxw0gm5iijd9r7y4qd7n2yrcp";
+      rev = "c3e56b8a4ffb6d906cdfcfee034581f9a8ece571";
+      sha256 = "0mq4jqvvqmy35bapybsqqpngy0r6j43n3pzm1y75bbfnyq5f4gab";
     })
     { }
 }:
@@ -12,7 +13,7 @@ let
   stdenv = pkgs.stdenv;
   binaries = naersk.buildPackage {
     name = "onion-or-news";
-    src = stdenv.lib.sourceFilesBySuffices ./. [
+    src = lib.sourceFilesBySuffices ./. [
       "Cargo.lock"
       "Cargo.toml"
       ".rs"
@@ -22,7 +23,7 @@ let
   };
   static = stdenv.mkDerivation {
     name = "onion-or-news-static";
-    src = stdenv.lib.sourceFilesBySuffices ./. [ ".html" ".js" ];
+    src = lib.sourceFilesBySuffices ./. [ ".html" ".js" ];
     phases = [ "unpackPhase" "installPhase" ];
     installPhase = ''
       mkdir -p $out/share/static
