@@ -17,20 +17,19 @@ use types::*;
 // In order to make the game harder,
 // we try to convert everything into this weird title case.
 fn bad_title_case(s: &str) -> String {
-    s.split_whitespace()
-        .map(|word| {
-            let mut new_word = String::with_capacity(s.len());
-            let mut chars = word.chars();
-            for c in chars.next().iter().copied().flat_map(char::to_uppercase) {
-                new_word.push(c);
-            }
-            for c in chars {
-                new_word.push(c);
-            }
-            new_word
-        })
-        .intersperse(String::from(" "))
-        .collect()
+    let iter = s.split_whitespace().map(|word| {
+        let mut new_word = String::with_capacity(s.len());
+        let mut chars = word.chars();
+        for c in chars.next().iter().copied().flat_map(char::to_uppercase) {
+            new_word.push(c);
+        }
+        for c in chars {
+            new_word.push(c);
+        }
+        new_word
+    });
+
+    return Itertools::intersperse(iter, String::from(" ")).collect();
 }
 
 async fn get(
