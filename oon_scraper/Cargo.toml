@@ -7,6 +7,7 @@ version = "0.1.0"
 [dependencies]
 futures = "0.3"
 itertools = "0.8"
+lazy_static = "1.4.0"
 oon_db = { version = "0.1", path = "../oon_db" }
 reqwest = { version = "0.11", features = ["json"] }
 serde = { version = "1.0", features = ["derive"] }

@@ -853,6 +853,7 @@ version = "0.1.0"
 dependencies = [
  "futures",
  "itertools",
+ "lazy_static",
  "oon_db",
  "reqwest",
  "serde",

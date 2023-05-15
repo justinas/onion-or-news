@@ -6,10 +6,21 @@ use std::env;
 use std::sync::Arc;
 
 use itertools::Itertools;
+use lazy_static::lazy_static;
 
 use oon_db::{models, Database};
 
 use types::*;
+
+const APP_NAME: &str = "Onion or News";
+const APP_URL: &str = "https://github.com/justinas/onion-or-news";
+
+lazy_static! {
+    static ref CLIENT: reqwest::Client = {
+        let ua = format!("{} ({})", APP_NAME, crate::APP_URL);
+        reqwest::Client::builder().user_agent(ua).build().unwrap()
+    };
+}
 
 // The Onion uses a weird title-case where they capitalize each word,
 // even ones like "a", "an", "in", etc.
@@ -29,7 +40,7 @@ fn bad_title_case(s: &str) -> String {
         new_word
     });
 
-    return Itertools::intersperse(iter, String::from(" ")).collect();
+    Itertools::intersperse(iter, String::from(" ")).collect()
 }
 
 async fn get(
@@ -44,7 +55,15 @@ async fn get(
         url.push_str("&after=");
         url.push_str(s);
     }
-    Ok(reqwest::get(&url).await?.json().await?)
+
+    let resp = CLIENT.get(&url).send().await?;
+
+    if resp.status().is_success() {
+        Ok(serde_json::from_str(&resp.text().await?)?)
+    } else {
+        let err = format!("code {}: {}", resp.status().as_u16(), resp.text().await?);
+        Err(err.into())
+    }
 }
 
 async fn get_all(db: Arc<Database>, subreddit: &str) -> Result<(), Box<dyn std::error::Error>> {
