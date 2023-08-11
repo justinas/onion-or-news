@@ -48,7 +48,7 @@ async fn get(
     after: Option<&str>,
 ) -> Result<Listing, Box<dyn std::error::Error>> {
     let mut url = format!(
-        "https://reddit.com/r/{}.json?sort=top",
+        "https://old.reddit.com/r/{}.json?sort=top",
         subreddits.join("+")
     );
     if let Some(s) = after {
