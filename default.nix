@@ -19,7 +19,7 @@ let
       ".rs"
       ".sql"
     ];
-    nativeBuildInputs = with pkgs; [ openssl pkgconfig postgresql.lib ];
+    nativeBuildInputs = with pkgs; [ openssl pkg-config postgresql.lib ];
   };
   static = stdenv.mkDerivation {
     name = "onion-or-news-static";
