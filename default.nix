@@ -1,10 +1,8 @@
 { pkgs ? import <nixpkgs> { }
 , lib ? pkgs.lib
 , naersk ? pkgs.callPackage
-    (pkgs.fetchFromGitHub {
-      owner = "nix-community";
-      repo = "naersk";
-      rev = "c3e56b8a4ffb6d906cdfcfee034581f9a8ece571";
+    (builtins.fetchTarball {
+      url = "https://github.com/nix-community/naersk/archive/c3e56b8a4ffb6d906cdfcfee034581f9a8ece571.tar.gz";
       sha256 = "0mq4jqvvqmy35bapybsqqpngy0r6j43n3pzm1y75bbfnyq5f4gab";
     })
     { }
