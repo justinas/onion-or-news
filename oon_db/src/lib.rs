@@ -13,7 +13,7 @@ use diesel::r2d2::{ConnectionManager, Pool, PoolError};
 #[macro_use]
 extern crate diesel_migrations;
 use diesel_migrations::MigrationHarness as _;
-use rand::RngCore;
+use rand::Rng as _;
 
 pub const MIGRATIONS: diesel_migrations::EmbeddedMigrations = embed_migrations!();
 
@@ -78,7 +78,7 @@ impl Database {
         no_arg_sql_function!(RANDOM, diesel::sql_types::Float, "RANDOM");
 
         let mut conn = self.pool.get()?;
-        let choice_id = ((rand::thread_rng().next_u32() as i32) & 1) + 1;
+        let choice_id = ((rand::rng().next_u32() as i32) & 1) + 1;
         let results = schema::questions::table
             .order(RANDOM)
             .filter(schema::questions::choice_id.eq(choice_id))
