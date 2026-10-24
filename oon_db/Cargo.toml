@@ -6,8 +6,8 @@ version = "0.1.0"
 
 [dependencies]
 chrono = "0.4"
-diesel = { version = "1.4", features = ["chrono", "network-address", "postgres", "r2d2", "uuidv07"] }
-diesel_migrations = "1.4"
-ipnetwork = "0.18"
-rand = "0.7"
+diesel = { version = "2", features = ["chrono", "network-address", "postgres", "r2d2", "uuid"] }
+diesel_migrations = "2"
+ipnetwork = "0.21"
+rand = "0.10"
 uuid = "0.8"
